@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="big-box">
+        <div class="full">
+            <table id="table1">
+                <thead id="thead1">
+                    <tr>
+                        <th id="qw">No</th>
+                        <th id="er">Coin</th>
+                        <th id="ty">Price</th>
+                        <th id="ui">Quantity</th>
+                        <th id="op">Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody1">
+                    <!-- <tr>    
+                            <td>1</td>
+                            <td>dfngchjk.</td>
+                            <td>dfcgnh</td>
+                            <td>sfbgnhm</td>
+                            <td>fghjkl</td>
+                      </tr> -->
+
+                </tbody>
+
+            </table>
+
+
+            <div class="full1">
+                <br>
+                <div class="full2">
+
+                    <p id="p1">Total</p>
+
+                </div >
+                <div id=full3>
+                    <p id="p2">hey</p>
+
+                </div>
+
+
+            </div>
+        </div>
+        <div id="but5" class="box">
+            <div class="box1">
+                <p class="t1">Add Crypto</p>
+                <p class="t2">write currency in the menu.</p>
+            </div>
+            <div class="box2">
+                <p>Name</p>
+                <form>
+                    <input list="browsers" id="input1" type="text">
+                    <datalist id="browsers">
+                        <!-- <option id="option" value="">
+                         <option value="AMAN"> 
+                        <option value="ROHIT">
+                        <option value="RAHUL">
+                        <option value="AMIT"> -->
+                    </datalist>
+                </form>
+            </div>
+            <div class="box3">
+                <p>Ouantity</p>
+
+                <input id="input2" type="text">
+
+
+
+            </div>
+
+            <div class="box4">
+
+                <button class="but3" id="but3" onclick="display3()" type="button">CANCEL</button>
+                <button class="but2" id="but1" onclick="display()" type="button">ADD</button>
+
+
+            </div>
+
+
+
+        </div>
+        <button class="butt" onclick="display1()">+</button>
+
+
+        <div id="update" class="box">
+            <div class="box1">
+                <p class="t1">Add Crypto</p>
+                <p class="t2">Update your quantity in the menu.</p>
+            </div>
+            <!-- <div class="box2">
+                <p>Name</p>
+                 <form>
+                    <input list="browsers" id="input1" type="text">
+                    <datalist id="browsers">
+                      <option id="option" value="">
+                         <option value="AMAN"> 
+                        <option value="ROHIT">
+                        <option value="RAHUL">
+                        <option value="AMIT"> -->
+            <!-- </datalist> -->
+            <!-- </form> -->
+            <!-- </div> -->
+            <div class="box3">
+                <p>Ouantity</p>
+
+                <input id="updateinput2" type="text">
+
+
+
+            </div>
+
+            <div class="box4">
+
+                <button class="updatebut3" id="updatebut3" onclick="updatedisplay3()" type="button">CANCEL</button>
+                <button id="updatebut1" type="button">ADD</button>
+                <!--  " -->
+                <!-- onclick="updatequantity()" -->
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <script>
+        axios.get("https://min-api.cryptocompare.com/data/all/coinlist")
+            .then(function (response) {
+                console.log(response)
+                let we = response.data;
+                // let yu=we.__proto__.Object
+                jsondata = we.Data
+
+                // console.log(jsondata)
+                //storing json data in an array of coin name
+                let arr = [];
+                console.log(jsondata.BTC)
+                for (ob in jsondata) {
+                    arr.push(jsondata[ob].Name)
+                }
+
+
+                console.log(arr)
+                //Taking input from user while user type and matching with coin list array.
+                oninput = function () {
+                    let count = 0;
+                    let inp = document.getElementById('input1').value;
+                    console.log(inp)
+                    inp = inp.toUpperCase();
+
+                    if (inp.length > 1) {
+                        for (let t = 0; t < arr.length; t++) {
+                            if (arr[t].startsWith(inp)) {
+                                // console.log('MATCH FOUND')
+                                let f = arr[t]
+                                count++
+
+                                // console.log(f)
+                                if (count < 3) {
+                                    let list = document.getElementById('browsers')
+                                    let option = document.createElement('option')
+                                    option.value = f;
+                                    list.appendChild(option)
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+
+
+
+                }
+
+
+
+
+
+
+
+
+
+
+
+            })
+            .catch(function (error) {
+                console.log("error")
+            })
+
+        function display() {
+
+
+
+
+
+            //    getting input by user
+
+            let a = document.getElementById('input1').value
+            let z = document.getElementById('input2').value
+
+
+
+
+            // putting currency over API
+            axios.get("https://min-api.cryptocompare.com/data/price?fsym=" + a + "&tsyms=INR")
+                .then(function (response) {
+                    console.log(response)
+                    let p = response.data;
+                    let m = p.INR;
+                    // console.log(m)
+
+
+
+
+
+                    //calculating BTC TO INR
+                    //console.log(z)
+                    let y = m * z;
+                    //console.log(y)
+                    //If the INPUT ARE SAME then we will add amount to previous row
+                    var previousBody = document.getElementById("tbody1");
+                    let sum1 = 0;
+                    var tableRow = 0;
+                    for (let i = 0; i < previousBody.rows.length; i++) {
+                        if (previousBody.rows[i].cells[1].innerHTML == a) {
+                            previousBody.rows[i].cells[4].innerHTML = parseFloat(previousBody.rows[i].cells[4].innerHTML) + parseFloat(y);
+                            previousBody.rows[i].cells[3].innerHTML = parseFloat(previousBody.rows[i].cells[3].innerHTML) + parseFloat(z);
+
+                            let g = document.getElementById('p2').innerHTML;
+                            let num1 = parseFloat(g) + parseFloat(y);
+                            document.getElementById('p2').innerHTML = num1
+
+                            tableRow = 1;
+                        }
+                        else {
+                            tableRow = 0;
+                        }
+
+                    }
+
+
+
+
+                    if (tableRow == 0) {
+
+                       
+                        let b = document.createTextNode(a)
+                        let x = document.createTextNode(z)
+                        let r = document.createTextNode(y)
+                        let data1 = document.createTextNode(m)
+
+                      
+
+                        let g = document.createElement('tr')
+
+
+
+
+
+                        let no = document.createElement('td') 
+                        let coin = document.createElement('td') 
+                        let price = document.createElement('td') 
+                        let quantity = document.createElement('td')  
+                        let amount = document.createElement('td')
+
+                      
+                        coin.appendChild(b)
+                        quantity.appendChild(x)
+                        amount.appendChild(r)
+                        price.appendChild(data1)
+                        
+                        g.appendChild(no)
+                        g.appendChild(coin)
+                        g.appendChild(price)
+                        g.appendChild(quantity)
+                        g.appendChild(amount)
+
+
+                        
+                        let f = document.getElementById('tbody1').appendChild(g)
+
+                       
+                        let rowup = document.getElementById('tbody1')
+                        console.log(rowup.rows.length)
+                        for (let u = 0; u < rowup.rows.length; u++) {
+                            rowup.rows[u].onclick = function (x) {
+                                console.log(x)
+                                console.log("HERE");
+                                document.getElementById('update').style.display = 'block';
+                                let rty = document.getElementById('updatebut1')
+
+                                rty.onclick = function () {
+                                    let rpv = rowup.rows[u].cells[3].innerHTML
+                                    console.log(rpv)
+                                    let amount = rowup.rows[u].cells[4].innerHTML
+                                    console.log(amount)
+                                    let act = amount / rpv;
+                                    console.log(act)
+
+                                    let qty = document.getElementById('updateinput2').value;
+                                    console.log(qty)
+                                    rowup.rows[u].cells[3].innerHTML = qty;
+
+                                    let upact = act * qty
+                                    rowup.rows[u].cells[4].innerHTML = upact;
+                                }
+
+                            }
+
+
+
+                        }
+                        for (let u = 0; u < rowup.rows.length; u++) {
+                            rowup.rows[u].onmouseover = function () {
+                                rowup.rows[u].style.background = 'lightgrey';
+                            }
+                            rowup.rows[u].onmouseout = function () {
+                                rowup.rows[u].style.background = 'white';
+                            }
+                        }
+
+                        
+                        let sum = 0;
+                        let body = document.getElementById("tbody1");
+
+                        for (let j = 0; j < body.rows.length; j++) {
+
+
+                            sum = sum + parseFloat(body.rows[j].cells[4].innerHTML);
+                            body.rows[j].cells[0].innerHTML = j;
+
+
+
+                        }
+                        document.getElementById('p2').innerHTML = sum;
+
+
+
+
+
+
+
+
+                        
+                        let but3 = document.createElement('button')
+                        let text = document.createTextNode('\u00D7')
+                        but3.appendChild(text);
+                        but3.className = "close"
+                        f.appendChild(but3)
+
+
+                        
+                        var close = document.getElementsByClassName('close')
+                        for (let q = 0; q < close.length; q++) {
+                            close[q].onclick = function () {
+                                var t = close[q].parentElement;
+                                t.style.display = "none";
+
+                                
+                                let body4 = document.getElementById('tbody1')
+
+                                let w = document.getElementById('p2').innerHTML
+                                let ww = parseFloat(w);
+                                console.log(ww)
+                                let crow = body4.rows[q].cells[4].innerHTML
+                                let croww = parseFloat(crow)
+                                console.log(croww)
+                                let sub = ww - croww;
+                                document.getElementById('p2').innerHTML = sub
+
+
+                            }
+
+                        }
+
+
+                    }
+
+
+                })
+                .catch(function (error) {
+                    console.log("error")
+
+                });
+
+
+        }
+
+
+        function display1() {
+            let block = document.getElementById('but5').style.display = 'block';
+        }
+        
+
+        function display3() {
+            let but = document.getElementById('but5')
+            but.style.display = 'none';
+        }
+        function updatedisplay3() {
+            let up = document.getElementById('update')
+            up.style.display = 'none';
+        }
+
+
+
+    </script>
+
+
+
+
+
+</body>
+
+
+
+</html>
